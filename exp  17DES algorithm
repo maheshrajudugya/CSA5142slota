@@ -1,0 +1,29 @@
+#include <stdio.h>
+#include <stdint.h>
+void reverseKeys(uint64_t keys[16]);
+void decrypt(uint64_t ciphertext, uint64_t keys[16]);
+uint64_t keys[16] = {
+    0xFFFFFFFFFFFFFFFF, 
+    0xEEEEEEEEEEEEEEEE, 
+    0x1111111111111111 };
+uint64_t ciphertext = 0x0123456789ABCDEF;
+
+int main() {
+    printf("Enter the ciphertext (64-bit in hexadecimal): ");
+    scanf("%llx", &ciphertext);
+    reverseKeys(keys);
+    decrypt(ciphertext, keys);
+    return 0;
+}
+void reverseKeys(uint64_t keys[16]) {
+    uint64_t temp;
+    int i;
+    for (i = 0; i < 8; i++) {
+        temp = keys[i];
+        keys[i] = keys[15 - i];
+        keys[15 - i] = temp;
+    }
+}
+void decrypt(uint64_t ciphertext, uint64_t keys[16]) {
+    printf("Decrypted plaintext: %llx\n", ciphertext);
+}
