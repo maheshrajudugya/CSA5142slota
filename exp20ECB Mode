@@ -1,0 +1,34 @@
+#include <stdio.h>
+#include <string.h>
+#define BLOCK_SIZE 16
+void encrypt_ecb(const unsigned char *plaintext, unsigned char *ciphertext, int size, const unsigned char *key);
+void decrypt_ecb(const unsigned char *ciphertext, unsigned char *plaintext, int size, const unsigned char *key);
+int main() {
+    unsigned char plaintext[] = "geography";
+    unsigned char key[] = "security";
+    int num_blocks = strlen((char *)plaintext) / BLOCK_SIZE + 1;
+    int padded_length = num_blocks * BLOCK_SIZE;
+    unsigned char ciphertext[padded_length];
+    unsigned char decrypted_text[padded_length];
+    encrypt_ecb(plaintext, ciphertext, padded_length, key);
+    decrypt_ecb(ciphertext, decrypted_text, padded_length, key);
+    printf("Original plaintext: %s\n", plaintext);
+    printf("Encrypted ciphertext: ");
+    for (int i = 0; i < padded_length; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+    printf("Decrypted plaintext: %s\n", decrypted_text);
+
+    return 0;
+}
+void encrypt_ecb(const unsigned char *plaintext, unsigned char *ciphertext, int size, const unsigned char *key) {
+    for (int i = 0; i < size; i += BLOCK_SIZE) {
+        memcpy(ciphertext + i, plaintext + i, BLOCK_SIZE);
+    }
+}
+void decrypt_ecb(const unsigned char *ciphertext, unsigned char *plaintext, int size, const unsigned char *key) {
+    for (int i = 0; i < size; i += BLOCK_SIZE) {
+        memcpy(plaintext + i, ciphertext + i, BLOCK_SIZE);
+    }
+}
